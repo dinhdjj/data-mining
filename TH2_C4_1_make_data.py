@@ -39,28 +39,23 @@ def all_greater_than_or_equal(obj, diem):
     return True
 
 
-df['XepLoai'] = 'rot'
-
-for i, row in df.iterrows():
-    # if isnan(row['KHTN']) and isnan(row['KHXH']):
-    #     continue
-
+def xep_loai(row):
     if not all_greater_than_or_equal(row, 1):
-        # df.at[i, 'XepLoai'] = 'rot'
-        continue
+        return 'rot'
 
     if (row['DiemTrungBinh'] < 5):
-        # df.at[i, 'XepLoai'] = 'rot'
-        continue
+        return 'rot'
 
     if row['DiemTrungBinh'] >= 8 and all_greater_than_or_equal(row, 7):
-        df.at[i, 'XepLoai'] = 'gioi'
-        continue
+        return 'gioi'
 
     if row['DiemTrungBinh'] >= 6.5 and all_greater_than_or_equal(row, 6):
-        df.at[i, 'XepLoai'] = 'kha'
-        continue
+        return 'kha'
 
-    df.at[i, 'XepLoai'] = 'trungbinh'
+    return 'trungbinh'
+
+
+# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.apply.html
+df['XepLoai'] = df.apply(xep_loai, axis=1)
 
 df.to_csv('datasets/Extended_Full_Mark_2020.csv', index=False)
