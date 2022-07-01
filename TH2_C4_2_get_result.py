@@ -17,14 +17,53 @@ số học sinh khá: 82298
 số học sinh giỏi: 24434
 """
 
-# Vẽ biểu đồ
-fig = plt.figure(figsize=(12, 6))
-xep_loai = fig.add_subplot(121)
-xep_loai.set_title('Xếp loại')
-xep_loai.hist(df['XepLoai'], bins=80)
+# Vẽ biểu đồ xếp loại học sinh (pie)
+plt.close()
+plt.figure(figsize=(12, 6))
+plt.tight_layout()
 
-diem_trung_binh = fig.add_subplot(122)
-diem_trung_binh.set_title('Điểm trung bình')
-diem_trung_binh.hist(df['DiemTrungBinh'], bins=80)
+rot = df[df['XepLoai'] == 'rot']['Code'].count()
+trungbinh = df[df['XepLoai'] == 'trungbinh']['Code'].count()
+kha = df[df['XepLoai'] == 'kha']['Code'].count()
+gioi = df[df['XepLoai'] == 'gioi']['Code'].count()
 
-plt.show()
+plt.title("Biểu đồ xếp loại học sinh (pie)")
+plt.pie(
+    [rot, trungbinh, kha, gioi],
+    labels=['Rớt', 'Trung bình', 'Khá', 'Giỏi'],
+    autopct='%1.1f%%'
+)
+
+plt.savefig('images/pie_xep_loai_hoc_sinh.png', dpi=300)
+# plt.show()
+
+# Vẽ biểu đồ xếp loại học sinh (dist)
+plt.close()
+plt.figure(figsize=(12, 6))
+plt.tight_layout()
+plt.title("Biểu đồ xếp loại học sinh (hist)")
+plt.xlabel("Xếp loại")
+plt.ylabel("Số lượng")
+plt.hist(df['XepLoai'])
+
+plt.savefig('images/hist_xep_loai_hoc_sinh.png', dpi=300)
+# plt.show()
+
+# Vẽ biểu đồ điểm trung bình (hist)
+plt.close()
+plt.figure(figsize=(12, 6))
+plt.tight_layout()
+plt.title("Biểu đồ điểm trung bình (hist)")
+plt.xlabel("Điểm")
+plt.ylabel("Số lượng")
+
+bins = [0, 0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4, 4.6, 4.8,
+        5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4, 6.6, 6.8, 7, 7.2, 7.4, 7.6, 7.8, 8, 8.2, 8.4, 8.6, 8.8, 9, 9.2, 9.4, 9.6, 9.8, 10]
+ticks = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5,
+         5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10]
+
+plt.hist(df['DiemTrungBinh'], bins=bins)
+plt.xticks(ticks)
+
+plt.savefig('images/hist_diem_trung_binh_hoc_sinh.png', dpi=300)
+# plt.show()
