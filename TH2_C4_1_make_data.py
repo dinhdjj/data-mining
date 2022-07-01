@@ -2,43 +2,10 @@ from math import isnan, nan
 import pandas as pd
 
 
-def try_float(x):
-    try:
-        return float(x)
-    except:
-        return nan
-
-
 df = pd.read_csv('datasets/Full_Mark_2020.csv')
 
-
-# Ép kiểu cho cột Vatli, vì có 1 row có dữ liệu ko hợp lệ nên phải dùng cách này
-df['Vatli'] = df['Vatli'].apply(try_float)
-
-
-# Code,Diali,GDCD,Hoahoc,KHTN,KHXH,LichSu,Ngoaingu,Nguvan,Sinhhoc,Toan,Vatli,city,tongdiem
-
-df['TongDiem'] = df['Diali'].apply(lambda x: x if not isnan(x) else 0) \
-    + df['GDCD'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Hoahoc'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['LichSu'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Ngoaingu'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Nguvan'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Sinhhoc'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Toan'].apply(lambda x: x if not isnan(x) else 0)\
-    + df['Vatli'].apply(lambda x: x if not isnan(x) else 0)
-
-df['TongSoMonThi'] = df['Diali'].apply(lambda x: 1 if not isnan(x) else 0) \
-    + df['GDCD'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Hoahoc'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['LichSu'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Ngoaingu'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Nguvan'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Sinhhoc'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Toan'].apply(lambda x: 1 if not isnan(x) else 0)\
-    + df['Vatli'].apply(lambda x: 1 if not isnan(x) else 0)
-
-df['DiemTrungBinh'] = df['TongDiem'] / df['TongSoMonThi']
+df['Vatli'] = pd.to_numeric(df['Vatli'], errors='coerce')
+df['DiemTrungBinh'] = df.iloc[:, 2:13].mean(axis=1)
 
 
 def all_greater_than_or_equal(obj, diem):
